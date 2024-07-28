@@ -1,6 +1,6 @@
 <img src="https://static.wikia.nocookie.net/arnelify/images/c/c8/Arnelify-logo-2024.png/revision/latest?cb=20240701012515" style="width:336px;" alt="Arnelify Logo" />
 
-![Arnelify](https://img.shields.io/badge/Arnelify%20React%20Native-0.5.0-blue) ![Node](https://img.shields.io/badge/Node-20.15.1-green) ![ESBuild](https://img.shields.io/badge/ESBuild-0.23.0-yellow)
+![Arnelify](https://img.shields.io/badge/Arnelify%20React%20Native-0.5.1-blue) ![Node](https://img.shields.io/badge/Node-20.15.1-green) ![ESBuild](https://img.shields.io/badge/ESBuild-0.23.0-yellow)
 
 ## 🚀 About
 **Arnelify React Native** - is a framework for creating Cross-Platform applications.
