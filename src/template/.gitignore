@@ -1,0 +1,63 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# IDE's
+**/.atom/
+**/.idea/
+**/nbproject/
+**/.vscode/
+
+# Metro
+.metro-health-check*
+
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+**/.xcode.env.local
+
+# Ruby / CocoaPods
+**/Pods/
+/vendor/bundle/
+
+# Android Studio
+build/
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+# Docker
+/*.dockerfile
+/*.yml
+
+# Yarn
+node_modules/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Misc
+**/.DS_Store
+**/desktop.ini
+**/*.log*
+**/*.sql
+**/*.db
