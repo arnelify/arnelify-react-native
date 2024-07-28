@@ -17,25 +17,25 @@ npx @react-native-community/cli@latest init AwesomeProject
 
 Setup Arnelify React Native:
 ```
-npm install arnelify-react-native && npx arnelify-react-native setup
+yarn add arnelify-react-native && yarn arnelify-react-native setup
 ```
 
 ## 🎉 Usage
 Run iOS app:
 ```
-npx react-native run-ios
+yarn react-native run-ios
 ```
 Run Android app:
 ```
-npx react-native run-android
+yarn react-native run-android
 ```
 Run Web app:
 ```
-npx arnelify-react-native run-web
+yarn arnelify-react-native run-web
 ```
 Compile Web:
 ```
-npx arnelify-react-native build-web
+yarn arnelify-react-native build-web
 ```
 ## ⭐ Release Notes
 Version 0.1.0 - First Raw Release
