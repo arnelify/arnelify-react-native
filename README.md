@@ -38,7 +38,7 @@ Compile Web:
 yarn arnelify-react-native build-web
 ```
 ## ⭐ Release Notes
-Version 0.1.0 - First Raw Release
+Version 0.5.1 - First Raw Release
 
 We are excited to introduce the first version of Arnelify React Native framework. Please note that this version is raw and still in active development. It includes only basic features, and the framework has not yet undergone thorough testing.
 
