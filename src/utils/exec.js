@@ -1,9 +1,9 @@
-const print = require("../utils/print");
+const print = require("./print");
 const { exec: command } = require("child_process");
 
 const exec = (cmd, silent = true) => {
 
-  return new Promise((resolve, reject) => {
+  return (new Promise((resolve, reject) => {
 
     let body = '';
 
@@ -15,24 +15,24 @@ const exec = (cmd, silent = true) => {
     });
 
     child.stderr.on('data', (data) => {
-      print(`StdErr: ${data}`);
+      print('danger', `StdErr: ${data}`);
       reject(null);
     });
     child.on('error', (error) => {
-      print(`Error: ${error}`);
+      print('danger', `Error: ${error}`);
       reject(null);
     });
 
     child.on('close', (code) => {
       const isSuccess = code === 0;
       if (!isSuccess) {
-        print(`Exited with code: ${code}`);
+        print('danger', `Exited with code: ${code}`);
         reject(null);
       }
 
       resolve(body);
     });
-  });
+  })).catch(() => process.exit());
 }
 
 module.exports = exec;

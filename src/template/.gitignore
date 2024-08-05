@@ -9,6 +9,9 @@
 # Metro
 .metro-health-check*
 
+# ESBuild
+web/
+
 # Xcode
 build/
 *.pbxuser
