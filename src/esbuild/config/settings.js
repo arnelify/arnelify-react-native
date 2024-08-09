@@ -6,8 +6,11 @@ const isDevelopment = process.argv.includes('run-web');
 const common = {
   allowOverwrite: true,
   bundle: true,
+  minify: !isDevelopment,
+  sourcemap: isDevelopment,
   format: isDevelopment ? "iife" : "cjs",
   tsconfig: "./tsconfig.json",
+  metafile: isDevelopment,
   alias: {
     'react-native': 'react-native-web'
   },
@@ -18,12 +21,7 @@ const client = {
   ...common,
   outdir: path.resolve(".", "web"),
   entryPoints: ["./index.js"],
-  entryNames: "[dir]/[hash]",
-  bundle: true,
-  sourcemap: isDevelopment,
-  minify: !isDevelopment,
-  metafile: true,
-  plugins: []
+  entryNames: "[dir]/[hash]"
 };
 
 const server = {
