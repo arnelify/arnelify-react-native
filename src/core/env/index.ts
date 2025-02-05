@@ -1,0 +1,24 @@
+/**
+ * Env
+ */
+class Env {
+
+  SERVER_ID = "1";
+  SERVER_ALLOW_EMPTY_FILES = "true";
+  SERVER_BLOCK_SIZE_KB = "1";
+  SERVER_CHARSET = "UTF-8";
+  SERVER_GZIP = "true";
+  SERVER_KEEP_EXTENSIONS = "true";
+  SERVER_MAX_FIELDS = "10";
+  SERVER_MAX_FIELDS_SIZE_TOTAL_MB = "30";
+  SERVER_MAX_FILES = "2";
+  SERVER_MAX_FILES_SIZE_TOTAL_MB = "60";
+  SERVER_MAX_FILE_SIZE_MB = "10";
+  SERVER_PORT = "3000";
+  SERVER_QUEUE_LIMIT = "1024";
+
+}
+
+const env = new Env();
+
+export default env;

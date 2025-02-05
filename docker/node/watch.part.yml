@@ -1,0 +1,15 @@
+  node:
+    container_name: web
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    volumes:
+      - ./.env:/var/www/web/.env
+      - ./src:/var/www/web/src
+      - ./index.js:/var/www/web/index.js
+      - ./tsconfig.js:/var/www/web/tsconfig.js
+      - ./web:/var/www/web/web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    tty: true

@@ -1,0 +1,14 @@
+services:
+  node:
+    container_name: web
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    volumes:
+      - ./src:/var/www/node/src
+      - ./web:/var/www/node/web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "8081:8081" #for hot module replacement
+    tty: true

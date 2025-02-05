@@ -1,0 +1,25 @@
+  node:
+    container_name: web
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    volumes:
+      - ./.env:/var/www/web/.env
+      - ./src:/var/www/web/src
+      - ./index.js:/var/www/web/index.js
+      - ./tsconfig.js:/var/www/web/tsconfig.js
+      - ./web:/var/www/web/web
+    healthcheck:
+      start_period: 10s
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+    restart: unless-stopped
+    ports:
+      - "3000:3000"

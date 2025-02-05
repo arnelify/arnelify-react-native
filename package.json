@@ -1,0 +1,30 @@
+{
+  "name": "arnelify-react-native",
+  "version": "0.5.9",
+  "description": "Framework for creating Cross-Platform applications.",
+  "keywords": [
+    "arnelify",
+    "arnelify-react-native",
+    "react-native"
+  ],
+  "author": "Arnelify",
+  "license": "MIT",
+  "main": "src/core/boot/index.ts",
+  "bin": {
+    "arnelify-react-native": "src/core/boot/index.ts"
+  },
+  "dependencies": {
+    "esbuild": "^0.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1"
+  },
+  "homepage": "https://github.com/arnelify/arnelify-react-native#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnelify/arnelify-react-native.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arnelify/arnelify-react-native/issues"
+  }
+}
