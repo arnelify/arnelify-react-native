@@ -1,6 +1,6 @@
 <img src="https://static.wikia.nocookie.net/arnelify/images/c/c8/Arnelify-logo-2024.png/revision/latest?cb=20240701012515" style="width:336px;" alt="Arnelify Logo" />
 
-![Arnelify](https://img.shields.io/badge/Arnelify%20React%20Native-0.5.9-yellow) ![C++](https://img.shields.io/badge/C++-2b-red) ![G++](https://img.shields.io/badge/G++-14.2.0-blue) ![NodeJS](https://img.shields.io/badge/NodeJS-22.13.1-green) ![Bun](https://img.shields.io/badge/Bun-1.2.0-blue)
+![Arnelify](https://img.shields.io/badge/Arnelify%20React%20Native-0.6.4-yellow) ![C++](https://img.shields.io/badge/C++-2b-red) ![G++](https://img.shields.io/badge/G++-14.2.0-blue) ![NodeJS](https://img.shields.io/badge/NodeJS-22.13.1-green) ![Bun](https://img.shields.io/badge/Bun-1.2.0-blue)
 
 ## 🚀 About
 **Arnelify React Native** - is a framework for creating Cross-Platform applications.
@@ -69,7 +69,7 @@ This software is licensed under the <a href="https://github.com/arnelify/arnelif
 Join us to help improve this software, fix bugs or implement new functionality. Active participation will help keep the software up-to-date, reliable, and aligned with the needs of its users.
 
 ## ⭐ Release Notes
-Version 0.5.9 - New Core
+Version 0.6.4 - New Core
 
 We are excited to introduce the Arnelify React Native framework! Please note that this version is raw and still in active development.
 

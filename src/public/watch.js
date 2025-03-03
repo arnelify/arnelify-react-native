@@ -1,6 +1,6 @@
 (function watch() {
 
-  socket = new WebSocket('ws://localhost:8081');
+  socket = new WebSocket('ws://localhost:8433');
 
   socket.onmessage = (event) => {
     const { version } = JSON.parse(event.data);

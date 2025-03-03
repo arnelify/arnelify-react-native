@@ -27,4 +27,3 @@ RUN yarn add -D esbuild@0.24.2 @types/ws
 CMD ["./web/server"]
 
 EXPOSE 3000
-EXPOSE 8081

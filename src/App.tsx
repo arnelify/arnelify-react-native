@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { Text, StyleSheet, SafeAreaView, Pressable } from 'react-native';
 
 /**
@@ -11,7 +11,7 @@ const App = (): JSX.Element => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>ARN Framework 0.5.9</Text>
+      <Text style={styles.title}>ARN Framework 0.6.4</Text>
       <Pressable onPress={() => setCount(count + 1)} style={styles.button}>
         <Text style={styles.text}>Native Mobile Button</Text>
       </Pressable>

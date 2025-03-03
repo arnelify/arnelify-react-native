@@ -21,8 +21,8 @@ COPY ./tsconfig.json ./tsconfig.json
 COPY ./yarn.lock ./yarn.lock
 
 RUN npm install -g bun@1.2.0 node-gyp@11.0.0 pkg@5.8.1 yarn@1.22.22
-RUN yarn add arnelify-server@0.6.0 react-native-web
-RUN yarn add -D esbuild@0.24.2 @types/ws
+RUN yarn add arnelify-server@0.6.3 react-native-web
+RUN yarn add -D esbuild@0.25.0 @types/ws
 
 EXPOSE 3000
-EXPOSE 8081
+EXPOSE 8433

@@ -25,4 +25,4 @@ RUN yarn add arnelify-server@0.6.0 react-native-web
 RUN yarn add -D esbuild@0.24.2 @types/ws
 
 EXPOSE 3000
-EXPOSE 8081
+EXPOSE 8433

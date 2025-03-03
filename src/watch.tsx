@@ -126,7 +126,7 @@ class Watch {
     });
 
     const version = Date.now();
-    const wss = new WebSocket.Server({ port: 8081 });
+    const wss = new WebSocket.Server({ port: 8433 });
     wss.on('connection', (ws: any) => {
       ws.send(JSON.stringify({ version }));
     });

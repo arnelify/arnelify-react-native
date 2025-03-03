@@ -10,5 +10,5 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-      - "8081:8081" #for hot module replacement
+      - "8433:8433" #for hot module replacement
     tty: true
