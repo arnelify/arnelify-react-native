@@ -26,7 +26,7 @@ import path from "path";
 import { readFile, writeFile } from "fs/promises";
 
 import Plant from "../../plant";
-import Logger from "core/logger";
+import Logger from "../../logger";
 
 /**
  * Env

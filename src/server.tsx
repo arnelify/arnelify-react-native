@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-/** @ts-ignore */
-import ArnelifyServer from "arnelify-server";
 import env from "core/env";
 import Logger from "core/logger";
-import { access, readFile } from "fs/promises";
 import path from "path";
+
+import { Http1, Http1Ctx, Http1Stream } from "arnelify-server";
+import { access, readFile } from "fs/promises";
 
 import App from './App';
 import manifest from "../app.json";
@@ -37,79 +37,82 @@ import { AppRegistry } from "react-native";
 /**
  * Production-server for development.
  */
-class Server {
+(async function main(): Promise<void> {
 
-  #router: any = null;
-  #server: any = null;
+  const http1: Http1 = new Http1({
+    allow_empty_files: env.HTTP3_ALLOW_EMPTY_FILES === 'true',
+    block_size_kb: Number(env.HTTP3_BLOCK_SIZE_KB),
+    charset: env.HTTP3_CHARSET,
+    compression: env.HTTP3_COMPRESSION === 'true',
+    keep_alive: Number(env.HTTP3_KEEP_ALIVE),
+    keep_extensions: env.HTTP3_KEEP_EXTENSIONS === 'true',
+    max_fields: Number(env.HTTP3_MAX_FIELDS),
+    max_fields_size_total_mb: Number(env.HTTP3_MAX_FIELDS_SIZE_TOTAL_MB),
+    max_files: Number(env.HTTP3_MAX_FILES),
+    max_files_size_total_mb: Number(env.HTTP3_MAX_FILES_SIZE_TOTAL_MB),
+    max_file_size_mb: Number(env.HTTP3_MAX_FILE_SIZE_MB),
+    port: Number(env.HTTP3_PORT),
+    storage_path: env.HTTP3_STORAGE_PATH,
+    thread_limit: Number(env.HTTP3_THREAD_LIMIT)
+  });
 
-  constructor() {
-    this.#router = null;
-    this.#server = new ArnelifyServer({
-      "SERVER_ALLOW_EMPTY_FILES": env.SERVER_ALLOW_EMPTY_FILES === "true",
-      "SERVER_BLOCK_SIZE_KB": Number(env.SERVER_BLOCK_SIZE_KB),
-      "SERVER_CHARSET": env.SERVER_CHARSET,
-      "SERVER_GZIP": env.SERVER_GZIP === "true",
-      "SERVER_KEEP_EXTENSIONS": env.SERVER_KEEP_EXTENSIONS === "true",
-      "SERVER_MAX_FIELDS": Number(env.SERVER_MAX_FIELDS),
-      "SERVER_MAX_FIELDS_SIZE_TOTAL_MB": Number(env.SERVER_MAX_FIELDS_SIZE_TOTAL_MB),
-      "SERVER_MAX_FILES": Number(env.SERVER_MAX_FILES),
-      "SERVER_MAX_FILES_SIZE_TOTAL_MB": Number(env.SERVER_MAX_FILES_SIZE_TOTAL_MB),
-      "SERVER_MAX_FILE_SIZE_MB": Number(env.SERVER_MAX_FILE_SIZE_MB),
-      "SERVER_PORT": Number(env.SERVER_PORT),
-      "SERVER_QUEUE_LIMIT": Number(env.SERVER_QUEUE_LIMIT),
-      "SERVER_UPLOAD_DIR": "./src/public"
-    });
-
-    this.#server.setHandler(this.#handler);
-  }
-
-  /**
-   * Handler
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   */
-  async #handler(req: any, res: any): Promise<void> {
-    const { _state } = req;
-
-    const forbidden: string[] = ['/server', '/server.js'];
-    const isForbidden: boolean = forbidden.includes(_state.path)
-      || _state.path.endsWith(".node");
-    if (isForbidden) {
-      res.setCode(404);
-      res.addBody(JSON.stringify({
-        code: 404,
-        error: "Not found."
-      }));
-      res.end();
-      return;
+  http1.logger(async (level: string, message: string): Promise<void> => {
+    switch (level) {
+      case 'success':
+        Logger.success(`${message}\n`);
+        break;
+      case 'info':
+        Logger.primary(`${message}\n`);
+        break;
+      case 'warning':
+        Logger.warning(`${message}\n`);
+        break;
+      default:
+        Logger.danger(`${message}\n`);
     }
+  });
 
-    const isStatic: boolean = _state.path !== "/";
-    if (isStatic) {
-      const filePath: string = path.resolve(`web/${_state.path}`);
+  http1.on('_', async (ctx: Http1Ctx, stream: Http1Stream): Promise<void> => {
+    const { _state } = ctx;
 
-      try {
-        await access(filePath);
+    const web_path: string = path.resolve('web') + path.sep;
+    const forbidden: string[] = [
+      path.join(web_path, 'index.html'),
+      path.join(web_path, 'server.js'),
+      path.join(web_path, 'server'),
+    ];
 
-      } catch (err) {
-        res.setCode(404);
-        res.addBody(JSON.stringify({
-          code: 404,
-          error: "Not found."
-        }));
+    const is_static: boolean = _state.path.indexOf('.') !== -1;
+    if (is_static) {
+      const file_path = path.resolve(path.join(web_path, _state.path));
+      if (!forbidden.includes(file_path)
+        && file_path.startsWith(web_path)) {
 
-        res.end();
-        return;
+        try {
+          await access(file_path);
+
+        } catch (err) {
+          await stream.set_code(404);
+          await stream.push_json({
+            code: 404,
+            error: "Not found."
+          });
+
+          await stream.end();
+          return;
+        }
+
+        await stream.set_code(200);
+        await stream.push_file(file_path);
+        await stream.end();
+        return
       }
 
-      res.setCode(200);
-      res.setFile(filePath, true);
-      res.end();
+      await stream.set_code(404);
+      await stream.push_json({ code: 404, error: 'Not found.' });
+      await stream.end();
       return;
     }
-
-    const filePath: string = path.resolve(`web/index.html`);
 
     const { name } = manifest;
     AppRegistry.registerComponent(name, () => App); /* @ts-ignore */
@@ -120,49 +123,17 @@ class Server {
     const styles = renderToStaticMarkup(getStyleElement());
     const dom = renderToString(element);
 
-    const buffer: Buffer = await readFile(filePath);
+    const buffer: Buffer = await readFile(path.resolve(path.join(web_path, 'index.html')));
     const html: string = buffer.toString()
       .replace('<div id="root"></div>', `<div id="root">${dom}</div>`)
       .replace('<!-- Dynamic-Styles -->', styles);
 
-    res.setCode(200);
-    res.setHeader('Content-Type', 'text/html');
-    res.addBody(Buffer.from(html));
-    res.end();
-    return;
-  }
+    await stream.set_code(200);
+    await stream.add_header('Content-Type', 'text/html');
+    await stream.push_bytes(Buffer.from(html));
+    await stream.end();
+  });
 
-  /**
-   * Start
-   */
-  start(): void {
-    this.#server.start((message: string, isError: boolean): void => {
-      if (isError) {
-        Logger.danger(`Error: ${message}\n`);
-        return;
-      }
-
-      Logger.success(`${message}\n`);
-    });
-  }
-
-  /**
-   * Stop
-   */
-  stop(): void {
-    this.#server.stop();
-    Logger.success("Server stopped\n");
-  }
-}
-
-/**
- * Main
- */
-(function main(): number {
-
-  const watch: Server = new Server();
-  watch.start();
-
-  return 0;
+  await http1.start();
 
 })();

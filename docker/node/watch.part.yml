@@ -4,12 +4,11 @@
       context: .
       dockerfile: node.dockerfile
     volumes:
-      - ./.env:/var/www/web/.env
-      - ./src:/var/www/web/src
-      - ./index.js:/var/www/web/index.js
-      - ./tsconfig.js:/var/www/web/tsconfig.js
-      - ./web:/var/www/web/web
+      - ./certs:/var/www/node/certs
+      - ./src:/var/www/node/src
+      - ./web:/var/www/node/web
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3001:3001"
+      - "8433:8433" #for hot module replacement
     tty: true

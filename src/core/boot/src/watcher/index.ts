@@ -30,7 +30,7 @@ import ESBuild from "./esbuild";
 import Html from "./html";
 import Native from "./native";
 
-import Logger from "core/logger";
+import Logger from "../logger";
 import Plant from "../plant";
 
 /**
@@ -62,16 +62,12 @@ class Watcher {
     const buildPath: string = path.dirname(serverPath);
     const srcPath: string = path.dirname(watchPath);
 
-    await Plant.exec(`rm -rf ${buildPath}/*`);
-    await Plant.xcopy(path.join(srcPath, 'public'), buildPath, (src: string): boolean => {
-      const exclude = [
-        path.join(srcPath, 'index.html')
-      ];
+    const exclude: string[] = [
+      path.join(srcPath, 'index.html')
+    ];
 
-      const isExcluded = exclude.includes(src);
-      if (isExcluded) return false;
-      return true;
-    });
+    await Plant.exec(`rm -rf ${buildPath}/*`);
+    await Plant.xcopy(path.join(srcPath, 'public'), buildPath, exclude);
 
     if (!isWatch) {
       const server = new ESBuild();

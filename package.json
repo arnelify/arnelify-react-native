@@ -1,25 +1,39 @@
 {
   "name": "arnelify-react-native",
-  "version": "0.6.4",
-  "description": "Framework for creating Cross-Platform applications.",
-  "keywords": [
-    "arnelify",
-    "arnelify-react-native",
-    "react-native"
-  ],
+  "version": "1.0.5",
+  "description": "FrontEnd-Framework for building Cross-Platform UI with HTTP 3.0 and WebTransport support.",
   "author": "Arnelify",
   "license": "MIT",
-  "main": "src/core/boot/index.ts",
+  "main": "src/core/boot/bin/index.js",
+  "types": "src/core/boot/bin/index.d.ts",
   "bin": {
-    "arnelify-react-native": "src/core/boot/index.ts"
+    "arnelify-react-native": "src/core/boot/bin/index.js"
   },
   "dependencies": {
     "esbuild": "^0.25.0"
   },
   "devDependencies": {
-    "@types/node": "^22.13.1",
-    "@types/ws": "^8.5.14"
+    "@types/node": "^22.13.1"
   },
+  "files": [
+    "certs/",
+    "docker/",
+    "src/app/",
+    "src/core/boot/bin/",
+    "src/core/logger/",
+    "src/public/",
+    "storage/",
+    ".env.local",
+    ".gitignore",
+    "babel.config.js",
+    "docker-compose.yml",
+    "index.js",
+    "LICENSE",
+    "node.dockerfile",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ],
   "homepage": "https://github.com/arnelify/arnelify-react-native#readme",
   "repository": {
     "type": "git",
@@ -27,5 +41,18 @@
   },
   "bugs": {
     "url": "https://github.com/arnelify/arnelify-react-native/issues"
-  }
+  },
+  "keywords": [
+    "arnelify",
+    "arnelify-react-native",
+    "real-time",
+    "frontend",
+    "framework",
+    "nodejs",
+    "bun",
+    "tcp2",
+    "http3",
+    "webtransport",
+    "udp"
+  ]
 }

@@ -5,10 +5,11 @@ services:
       context: .
       dockerfile: node.dockerfile
     volumes:
+      - ./certs:/var/www/node/certs
       - ./src:/var/www/node/src
       - ./web:/var/www/node/web
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3001:3001"
       - "8433:8433" #for hot module replacement
     tty: true

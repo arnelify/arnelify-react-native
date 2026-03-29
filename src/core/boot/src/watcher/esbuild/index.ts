@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+/** @ts-ignore */
 import esbuild from "esbuild";
 
 /**
@@ -29,7 +30,7 @@ import esbuild from "esbuild";
  */
 class ESBuild {
 
-  opts: { [key: string]: any } = {
+  opts: any = {
     alias: {
       'arnelify-react-native': 'react-native-web',
       'react-native': 'react-native-web'
@@ -116,13 +117,17 @@ class ESBuild {
    */
   setPlatform(value: string): void {
     this.opts.platform = value;
+    if (value === 'node') {
+      this.opts.packages = "external";
+      this.opts.external = ["node_modules"];
+    }
   }
 
   /**
   * Add Plugin
   * @param {object} value
   */
-  addPlugin(value: {[key: string]: any}): void {
+  addPlugin(value: { [key: string]: any }): void {
     this.opts.plugins.push(value);
   }
 

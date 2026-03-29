@@ -22,133 +22,101 @@
  * SOFTWARE.
  */
 
-/** @ts-ignore */
-import ArnelifyServer from "arnelify-server";
 import env from "core/env";
 import Logger from "core/logger";
-import { access } from "fs/promises";
 import path from "path";
 
-/** for hot module replacement
- * @ts-ignore */
-import WebSocket from "ws";
+import { Http1, Http1Ctx, Http1Stream } from "arnelify-server";
+import { access } from "fs/promises";
 
 /**
  * Watch-server for development.
  */
-class Watch {
+(async function main(): Promise<void> {
 
-  #router: any = null;
-  #server: any = null;
+  const http1: Http1 = new Http1({
+    allow_empty_files: env.HTTP3_ALLOW_EMPTY_FILES === 'true',
+    block_size_kb: Number(env.HTTP3_BLOCK_SIZE_KB),
+    charset: env.HTTP3_CHARSET,
+    compression: env.HTTP3_COMPRESSION === 'true',
+    keep_alive: Number(env.HTTP3_KEEP_ALIVE),
+    keep_extensions: env.HTTP3_KEEP_EXTENSIONS === 'true',
+    max_fields: Number(env.HTTP3_MAX_FIELDS),
+    max_fields_size_total_mb: Number(env.HTTP3_MAX_FIELDS_SIZE_TOTAL_MB),
+    max_files: Number(env.HTTP3_MAX_FILES),
+    max_files_size_total_mb: Number(env.HTTP3_MAX_FILES_SIZE_TOTAL_MB),
+    max_file_size_mb: Number(env.HTTP3_MAX_FILE_SIZE_MB),
+    port: Number(env.HTTP3_PORT),
+    storage_path: env.HTTP3_STORAGE_PATH,
+    thread_limit: Number(env.HTTP3_THREAD_LIMIT)
+  });
 
-  constructor() {
-    this.#router = null;
-    this.#server = new ArnelifyServer({
-      "SERVER_ALLOW_EMPTY_FILES": env.SERVER_ALLOW_EMPTY_FILES === "true",
-      "SERVER_BLOCK_SIZE_KB": Number(env.SERVER_BLOCK_SIZE_KB),
-      "SERVER_CHARSET": env.SERVER_CHARSET,
-      "SERVER_GZIP": env.SERVER_GZIP === "true",
-      "SERVER_KEEP_EXTENSIONS": env.SERVER_KEEP_EXTENSIONS === "true",
-      "SERVER_MAX_FIELDS": Number(env.SERVER_MAX_FIELDS),
-      "SERVER_MAX_FIELDS_SIZE_TOTAL_MB": Number(env.SERVER_MAX_FIELDS_SIZE_TOTAL_MB),
-      "SERVER_MAX_FILES": Number(env.SERVER_MAX_FILES),
-      "SERVER_MAX_FILES_SIZE_TOTAL_MB": Number(env.SERVER_MAX_FILES_SIZE_TOTAL_MB),
-      "SERVER_MAX_FILE_SIZE_MB": Number(env.SERVER_MAX_FILE_SIZE_MB),
-      "SERVER_PORT": Number(env.SERVER_PORT),
-      "SERVER_QUEUE_LIMIT": Number(env.SERVER_QUEUE_LIMIT),
-      "SERVER_UPLOAD_DIR": "./src/public"
-    });
+  http1.logger(async (level: string, message: string): Promise<void> => {
+    switch (level) {
+      case 'success':
+        Logger.success(`${message}\n`);
+        break;
+      case 'warning':
+        Logger.warning(`${message}\n`);
+        break;
+      case 'error':
+        Logger.danger(`${message}\n`);
+        break;
+    }
+  });
 
-    this.#server.setHandler(this.#handler);
-  }
+  http1.on('_', async (ctx: Http1Ctx, stream: Http1Stream): Promise<void> => {
+    const { _state } = ctx;
 
-  /**
-   * Handler
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   */
-  async #handler(req: any, res: any): Promise<void> {
-    const { _state } = req;
+    const web_path: string = path.resolve('web') + path.sep;
+    const forbidden: string[] = [
+      path.join(web_path, 'index.html'),
+      path.join(web_path, 'server.js'),
+      path.join(web_path, 'server'),
+    ];
 
-    const forbidden: string[] = ['/server', '/server.js'];
-    const isForbidden: boolean = forbidden.includes(_state.path);
-    if (isForbidden) {
-      res.setCode(404);
-      res.addBody(JSON.stringify({
-        code: 404,
-        error: "Not found."
-      }));
-      res.end();
+    const is_static: boolean = _state.path.indexOf('.') !== -1;
+    if (is_static) {
+      const file_path = path.resolve(path.join(web_path, _state.path));
+      if (!forbidden.includes(file_path) 
+        && file_path.startsWith(web_path)) {
+        try {
+          await access(file_path);
+
+        } catch (err) {
+          await stream.set_code(404);
+          await stream.push_json({
+            code: 404,
+            error: "Not found."
+          });
+
+          await stream.end();
+          return;
+        }
+
+        await stream.set_code(200);
+        await stream.push_file(file_path);
+        await stream.end();
+        return
+      }
+
+      await stream.set_code(404);
+      await stream.push_json({ code: 404, error: 'Not found.' });
+      await stream.end();
       return;
     }
 
-    const isStatic: boolean = _state.path !== "/";
-    if (isStatic) {
-      const filePath: string = path.resolve(`web/${_state.path}`);
-      try {
-        await access(filePath);
+    await stream.set_code(200);
+    await stream.push_file(path.resolve(path.join(web_path, 'index.html')));
+    await stream.end();
+  });
 
-      } catch (err) {
-        res.setCode(404);
-        res.addBody(JSON.stringify({
-          code: 404,
-          error: "Not found."
-        }));
+  //   const version = Date.now();
+  //   const wss = new WebSocket.Server({ port: 8433 });
+  //   wss.on('connection', (ws: any) => {
+  //     ws.send(JSON.stringify({ version }));
+  //   });
 
-        res.end();
-        return;
-      }
-
-      res.setCode(200);
-      res.setFile(filePath, true);
-      res.end();
-      return;
-    }
-
-    const filePath: string = path.resolve(`web/index.html`);
-    res.setCode(200);
-    res.setFile(filePath, true);
-    res.end();
-  }
-
-  /**
-   * Start
-   */
-  start(): void {
-    this.#server.start((message: string, isError: boolean): void => {
-      if (isError) {
-        Logger.danger(`Error: ${message}\n`);
-        return;
-      }
-
-      Logger.success(`${message}\n`);
-    });
-
-    const version = Date.now();
-    const wss = new WebSocket.Server({ port: 8433 });
-    wss.on('connection', (ws: any) => {
-      ws.send(JSON.stringify({ version }));
-    });
-  }
-
-  /**
-   * Stop
-   */
-  stop(): void {
-    this.#server.stop();
-    Logger.success("Server stopped\n");
-  }
-}
-
-/**
- * Main
- */
-(function main(): number {
-
-  const watch: Watch = new Watch();
-  watch.start();
-
-  return 0;
+  await http1.start();
 
 })();

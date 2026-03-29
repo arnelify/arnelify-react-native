@@ -26,7 +26,7 @@ import path from "path";
 import { access, copyFile, mkdir, readdir, rmdir, stat, unlink } from "fs/promises";
 import { exec } from "child_process";
 
-import Logger from "core/logger";
+import Logger from "../logger";
 
 /**
  * Plant
@@ -35,12 +35,12 @@ class Plant {
 
   /**
    * Exists
-   * @param {string} srcPath 
+   * @param {string} src 
    * @returns
    */
-  static async exists(srcPath: string): Promise<boolean> {
+  static async exists(src: string): Promise<boolean> {
     try {
-      await access(srcPath);
+      await access(src);
       return true;
 
     } catch {
@@ -80,22 +80,22 @@ class Plant {
    * @param {string} path
    * @returns 
    */
-  static async xrm(srcPath: string): Promise<boolean> {
-    const exists: boolean = await this.exists(srcPath);
+  static async xrm(src: string): Promise<boolean> {
+    const exists: boolean = await this.exists(src);
     if (!exists) return true;
 
-    const srcStat: any = await stat(srcPath);
+    const srcStat: any = await stat(src);
     if (srcStat.isDirectory()) {
-      const items: string[] = await readdir(srcPath);
+      const items: string[] = await readdir(src);
       for (const item of items) {
-        const itemPath: string = path.join(srcPath, item);
+        const itemPath: string = path.join(src, item);
         await this.xrm(itemPath);
       }
 
-      await rmdir(srcPath);
+      await rmdir(src);
 
     } else {
-      await unlink(srcPath);
+      await unlink(src);
     }
 
     return true;
@@ -103,40 +103,31 @@ class Plant {
 
   /**
    * XCopy
-   * @param {string} srcPath 
-   * @param {string} destPath 
+   * @param {string} src 
+   * @param {string} dest 
    */
-  static async xcopy(srcPath: string, destPath: string, callback: CallableFunction | null = null) {
-    const isExists: boolean = await this.exists(srcPath);
+  static async xcopy(src: string, dest: string, exclude: string[] = []) {
+    for (const excluded of exclude) {
+      if (dest.startsWith(excluded)) return;
+    }
+
+    const isExists: boolean = await this.exists(src);
     if (!isExists) {
-      Logger.danger(`Doesn't exist: ${srcPath}\n`);
+      Logger.danger(`Doesn't exist: ${src}\n`);
       process.exit(1);
     }
 
-    const srcStat: any = await stat(srcPath);
+    const srcStat: any = await stat(src);
     if (srcStat.isDirectory()) {
-      await mkdir(destPath, { recursive: true });
-      const entries: string[] = await readdir(srcPath);
+      await mkdir(dest, { recursive: true });
+      const entries: string[] = await readdir(src);
       for (const entry of entries) {
-        const srcFile: string = path.join(srcPath, entry);
-        const destFile: string = path.join(destPath, entry);
-        if (callback) {
-          const hasPass: boolean = callback(destFile);
-          if (hasPass) await Plant.xcopy(srcFile, destFile);
-
-        } else {
-          await Plant.xcopy(srcFile, destFile);
-        }
+        const srcFile: string = path.join(src, entry);
+        const destFile: string = path.join(dest, entry);
+        await Plant.xcopy(srcFile, destFile, exclude);
       }
-
     } else {
-      if (callback) {
-        const hasPass: boolean = callback(destPath);
-        if (hasPass) await Plant.xcopy(srcPath, destPath);
-
-      } else {
-        await copyFile(srcPath, destPath);
-      }
+      await copyFile(src, dest);
     }
   }
 }

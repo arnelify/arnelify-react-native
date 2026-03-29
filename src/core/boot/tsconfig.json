@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "core/*": [ "./src/core/*" ],
+      "middleware/*": [ "./src/app/middleware/*" ],
+      "repositories/*": [ "./src/app/repositories/*" ],
+      "requests/*": [ "./src/app/requests/*" ],
+      "services/*": [ "./src/app/services/*" ],
+      "translations/*": [ "./src/app/translations/*" ],
+    },
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "./bin",
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "strict": true,
+    "target": "ES2020"
+  },
+  "include": ["./src"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs",
+      "types": ["bun-types"]
+    }
+  }
+}

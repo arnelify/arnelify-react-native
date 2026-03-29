@@ -4,14 +4,10 @@
       context: .
       dockerfile: node.dockerfile
     volumes:
-      - ./.env:/var/www/web/.env
-      - ./src:/var/www/web/src
-      - ./index.js:/var/www/web/index.js
-      - ./tsconfig.js:/var/www/web/tsconfig.js
-      - ./web:/var/www/web/web
+      - ./certs:/var/www/node/certs
     healthcheck:
       start_period: 10s
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
       interval: 10s
       timeout: 10s
       retries: 3
@@ -22,4 +18,4 @@
           memory: 1024M
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3001:3001"
