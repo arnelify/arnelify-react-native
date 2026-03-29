@@ -80,10 +80,6 @@ class Boot {
     ];
 
     await Plant.xcopy(lib_path, root_path, exclude);
-    const root_git_path = path.resolve(path.join(root_path, '.gitignore'));
-    const lib_git_path = path.resolve(path.join(lib_path, '.gitignore'));
-    await Plant.xcopy(lib_git_path, root_git_path);
-    
     await Plant.mkdir(path.resolve(path.join(root_path, 'src/core/env')));
     const lib_boot_path: string = path.resolve(path.join(lib_path, 'src/core/boot/bin'));
     const root_boot_path: string = path.resolve(path.join(root_path, 'src/core/boot/bin'));

@@ -73,9 +73,6 @@ class Boot {
             path_1.default.resolve(path_1.default.join(root_path, 'yarn.lock'))
         ];
         await plant_1.default.xcopy(lib_path, root_path, exclude);
-        const root_git_path = path_1.default.resolve(path_1.default.join(root_path, '.gitignore'));
-        const lib_git_path = path_1.default.resolve(path_1.default.join(lib_path, '.gitignore'));
-        await plant_1.default.xcopy(lib_git_path, root_git_path);
         await plant_1.default.mkdir(path_1.default.resolve(path_1.default.join(root_path, 'src/core/env')));
         const lib_boot_path = path_1.default.resolve(path_1.default.join(lib_path, 'src/core/boot/bin'));
         const root_boot_path = path_1.default.resolve(path_1.default.join(root_path, 'src/core/boot/bin'));

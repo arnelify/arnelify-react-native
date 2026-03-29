@@ -26,6 +26,13 @@
  */
 declare class Logger {
     /**
+     * Log
+     * @param {string} message
+     * @param {string} color
+     * @param {number} replace
+     */
+    static log(message: string, color: string, replace: number): void;
+    /**
      * Primary
      * @param {string} message
      * @param {number} replace

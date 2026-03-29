@@ -1,6 +1,6 @@
 <img src="https://static.wikia.nocookie.net/arnelify/images/c/c8/Arnelify-logo-2024.png/revision/latest?cb=20240701012515" style="width:336px;" alt="Arnelify Logo" />
 
-![Arnelify](https://img.shields.io/badge/Arnelify%20React%20Native-1.0.5-yellow) ![NodeJS](https://img.shields.io/badge/NodeJS-24.13.1-green) ![Bun](https://img.shields.io/badge/Bun-1.3.6-blue)
+![Arnelify](https://img.shields.io/badge/Arnelify%20React%20Native-1.0.7-yellow) ![NodeJS](https://img.shields.io/badge/NodeJS-24.13.1-green) ![Bun](https://img.shields.io/badge/Bun-1.3.6-blue)
 
 ## 🚀 About
 **Arnelify React Native** - is a FrontEnd-Framework for building Cross-Platform UI with HTTP 3.0 and WebTransport support.
@@ -68,7 +68,7 @@ This software is licensed under the <a href="https://github.com/arnelify/arnelif
 Join us to help improve this software, fix bugs or implement new functionality. Active participation will help keep the software up-to-date, reliable, and aligned with the needs of its users.
 
 ## ⭐ Release Notes
-Version 1.0.5 - is a FrontEnd-Framework for building Cross-Platform UI with HTTP 3.0 and WebTransport support.
+Version 1.0.7 - is a FrontEnd-Framework for building Cross-Platform UI with HTTP 3.0 and WebTransport support.
 
 We are excited to introduce the Arnelify React Native framework! Please note that this version is raw and still in active development.
 

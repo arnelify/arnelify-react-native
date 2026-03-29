@@ -1,6 +1,6 @@
 {
   "name": "arnelify-react-native",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "FrontEnd-Framework for building Cross-Platform UI with HTTP 3.0 and WebTransport support.",
   "author": "Arnelify",
   "license": "MIT",
@@ -24,7 +24,6 @@
     "src/public/",
     "storage/",
     ".env.local",
-    ".gitignore",
     "babel.config.js",
     "docker-compose.yml",
     "index.js",

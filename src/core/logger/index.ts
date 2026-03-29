@@ -28,16 +28,26 @@
 class Logger {
 
   /**
+   * Log
+   * @param {string} message
+   * @param {string} color 
+   * @param {number} replace 
+   */
+  static log(message: string, color: string, replace: number): void {
+    if (replace) {
+      process.stdout.write('\r' + ' '.repeat(replace) + '\r');
+    }
+
+    process.stdout.write(`${color}[Arnelify React Native]: ${message}\x1b[0m`);
+  }
+
+  /**
    * Primary
    * @param {string} message 
    * @param {number} replace 
    */
   static primary(message: string, replace: number = 0): void {
-    const before: string = (replace ? "\r" : "") + "\x1b[0m";
-    const after: string = "\x1b[0m";
-
-    if (replace) process.stdout.write("\r".padEnd(replace, ' '));
-    process.stdout.write(`${before}[Arnelify React Native]: ${message}${after}`);
+    Logger.log(message, '\x1b[90m', replace);
   }
 
   /**
@@ -46,11 +56,7 @@ class Logger {
    * @param {number} replace 
    */
   static success(message: string, replace: number = 0): void {
-    const before: string = (replace ? "\r" : "") + "\x1b[32m";
-    const after: string = "\x1b[0m";
-
-    if (replace) process.stdout.write("\r".padEnd(replace, ' '));
-    process.stdout.write(`${before}[Arnelify React Native]: ${message}${after}`);
+    Logger.log(message, '\x1b[32m', replace);
   }
 
   /**
@@ -59,11 +65,7 @@ class Logger {
    * @param {number} replace 
    */
   static warning(message: string, replace: number = 0): void {
-    const before: string = (replace ? "\r" : "") + "\x1b[33m";
-    const after: string = "\x1b[0m";
-
-    if (replace) process.stdout.write("\r".padEnd(replace, ' '));
-    process.stdout.write(`${before}[Arnelify React Native]: ${message}${after}`);
+    Logger.log(message, '\x1b[33m', replace);
   }
 
   /**
@@ -72,11 +74,7 @@ class Logger {
    * @param {number} replace 
    */
   static danger(message: string, replace: number = 0): void {
-    const before: string = (replace ? "\r" : "") + "\x1b[31m";
-    const after: string = "\x1b[0m";
-
-    if (replace) process.stdout.write("\r".padEnd(replace, ' '));
-    process.stdout.write(`${before}[Arnelify React Native]: ${message}${after}`);
+    Logger.log(message, '\x1b[31m', replace);
   }
 }
 
